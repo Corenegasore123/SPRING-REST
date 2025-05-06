@@ -4,15 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prod_id")  // This is the actual column name in the DB
     private Long productId;
+
+    @Column(name = "prod_name")  // Matches DB column
     private String prodName;
+
+    @Column(name = "description")  // Matches DB column
     private String description;
+
+    @Column(name = "price")  // Matches DB column
     private int price;
+
     public Long getProductId() {
         return productId;
     }

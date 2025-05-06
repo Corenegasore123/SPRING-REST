@@ -1,11 +1,14 @@
 package rca.restapi._B;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByPrice(double price);
+    Page<Product> findByPrice(double price, Pageable pageable);
 
-    List<Product> findProductByProdName(String prodName);
+    Page<Product> findByProdName(String prodName, Pageable pageable);
+
+    @Override
+    Page<Product> findAll(Pageable pageable);
 }

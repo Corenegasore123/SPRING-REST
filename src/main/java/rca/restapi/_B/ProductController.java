@@ -1,6 +1,7 @@
 package rca.restapi._B;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,8 +22,12 @@ public class ProductController {
     private ProductService service;
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return service.getAllProducts();
+    public Page<Product> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "productId") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+        return service.getAllProducts(page, size, sortBy, direction);
     }
 
     @PostMapping
@@ -38,14 +41,24 @@ public class ProductController {
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
 
-    @GetMapping("/by-price")
-    public List<Product> getProductsByPrice(@RequestParam("price") double price) {
-        return service.getProductsByPrice(price);
+    @GetMapping("/price/{price}")
+    public Page<Product> getProductsByPrice(
+            @PathVariable double price,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "productId") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+        return service.getProductsByPrice(price, page, size, sortBy, direction);
     }
 
     @GetMapping("/prodName/{prodName}")
-    public List<Product> getProductsByName(@PathVariable("prodName") String prodName) {
-        return service.getProductsByName(prodName);
+    public Page<Product> getProductsByName(
+            @PathVariable String prodName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "productId") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+        return service.getProductsByName(prodName, page, size, sortBy, direction);
     }
 
     @DeleteMapping("/{id}")
